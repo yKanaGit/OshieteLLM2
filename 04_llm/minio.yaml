@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 300Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-config
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-workdir
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: "quay.io/mmuraki/minio:latest"
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 9000
+          - containerPort: 9001
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+        env:
+        - name: MINIO_ROOT_USER
+          value: "minio"
+        - name: MINIO_ROOT_PASSWORD
+          value: "minio123"
+        volumeMounts:
+        - name: minio-storage
+          mountPath: /data
+        - name: minio-config
+          mountPath: /.mc
+        - name: minio-workdir
+          mountPath: /mnt
+      volumes:
+      - name: minio-storage
+        persistentVolumeClaim:
+          claimName: minio-storage
+      - name: minio-config
+        persistentVolumeClaim:
+          claimName: minio-config
+      - name: minio-workdir
+        persistentVolumeClaim:
+          claimName: minio-workdir
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+spec:
+  selector:
+    app: minio
+  ports:
+  - name: minio-api
+    protocol: TCP
+    port: 9000
+    targetPort: 9000
+  - name: minio-console
+    protocol: TCP
+    port: 80
+    targetPort: 9001
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: minio-api
+spec:
+  port:
+    targetPort: 9000
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: minio
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: minio-console
+spec:
+  port:
+    targetPort: 9001
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: minio
+    weight: 100
+  wildcardPolicy: None

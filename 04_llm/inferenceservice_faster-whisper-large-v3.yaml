@@ -1,0 +1,31 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: faster-whisper-large-v3
+    serving.kserve.io/deploymentMode: RawDeployment
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: faster-whisper-large-v3
+  namespace: user1
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: CTranslate2
+      name: ""
+      runtime: faster-whisper-large-v3-faster-whisper
+      storage:
+        key: aws-connection-minio
+        path: models/faster-whisper-large-v3
+    tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      operator: Exists
+    - effect: PreferNoSchedule
+      key: gpu-workload-only
+      operator: Exists
+    nodeSelector:
+      gpu-node-type: "3"

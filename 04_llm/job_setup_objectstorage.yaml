@@ -1,0 +1,79 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: setup-objectstorage-work
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Gi
+  volumeMode: Filesystem
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup-objectstorage
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - name: setup-objectstorage
+        image: quay.io/mmuraki/model_uploader:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/bash"]
+        args:
+        - -c
+        - |-
+          aws s3 rm --recursive s3://${NAMESPACE}
+          aws s3 mb s3://${NAMESPACE}
+          set -e
+          aws s3 ls --recursive s3://${NAMESPACE}
+          cd /mnt
+          rm -rf ./*
+          git clone https://huggingface.co/RedHatAI/phi-4-quantized.w8a8
+          rm -rf phi-4-quantized.w8a8/.git
+          aws s3 cp --recursive phi-4-quantized.w8a8 s3://${NAMESPACE}/models/phi-4-quantized.w8a8
+          git clone https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B
+          rm -rf Llama-3-ELYZA-JP-8B/.git
+          aws s3 cp --recursive Llama-3-ELYZA-JP-8B s3://${NAMESPACE}/models/Llama-3-ELYZA-JP-8B
+          #git clone https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B-AWQ
+          #rm -rf Llama-3-ELYZA-JP-8B-AWQ/.git
+          #aws s3 cp --recursive Llama-3-ELYZA-JP-8B-AWQ s3://${NAMESPACE}/models/Llama-3-ELYZA-JP-8B-AWQ
+          git clone https://huggingface.co/weblab-GENIAC/Tanuki-8B-dpo-v1.0
+          rm -rf Tanuki-8B-dpo-v1.0/.git
+          aws s3 cp --recursive Tanuki-8B-dpo-v1.0 s3://${NAMESPACE}/models/Tanuki-8B-dpo-v1.0
+          git clone https://huggingface.co/ibm-granite/granite-3.0-8b-instruct
+          rm -rf granite-3.0-8b-instruct/.git
+          aws s3 cp --recursive granite-3.0-8b-instruct s3://${NAMESPACE}/models/granite-3.0-8b-instruct
+          git clone https://huggingface.co/intfloat/multilingual-e5-large
+          rm -rf multilingual-e5-large/.git
+          aws s3 cp --recursive multilingual-e5-large s3://${NAMESPACE}/models/multilingual-e5-large
+          git clone https://huggingface.co/Systran/faster-whisper-large-v3
+          rm -rf faster-whisper-large-v3/.git
+          aws s3 cp --recursive faster-whisper-large-v3 s3://${NAMESPACE}/models/faster-whisper-large-v3
+          mkdir -p /tmp/stablediffusion
+          touch /tmp/stablediffusion/dummy
+          aws s3 cp --recursive /tmp/stablediffusion s3://${NAMESPACE}/models/stablediffusion
+          set +e
+          aws s3 ls --recursive s3://${NAMESPACE}
+        envFrom:
+        - secretRef:
+            name: aws-connection-minio
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: AWS_ENDPOINT_URL
+          value: http://minio.minio.svc.cluster.local:9000
+        volumeMounts:
+        - name: work
+          mountPath: /mnt
+      volumes:
+        - name: work
+          persistentVolumeClaim:
+            claimName: setup-objectstorage-work
+      restartPolicy: Never

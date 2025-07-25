@@ -1,0 +1,57 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    openshift.io/display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-name: vllm-runtime
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: vllm-runtime
+spec:
+  containers:
+  - args:
+    - --trust-remote-code
+    - --model
+    - /mnt/models/
+    - --download-dir
+    - /models-cache
+    - --served-model-name={{.Name}}
+    - --port
+    - "8080"
+    env:
+    - name: VLLM_USE_V1
+      value: "1"
+    - name: NUMBA_CACHE_DIR
+      value: /tmp
+    image: vllm/vllm-openai:v0.9.2
+    name: kserve-container
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    volumeMounts:
+    - name: shm
+      mountPath: /dev/shm
+    - name: cache
+      mountPath: /.cache
+    - name: config
+      mountPath: /.config
+    - name: triton
+      mountPath: /.triton
+  multiModel: false
+  supportedModelFormats:
+  - autoSelect: true
+    name: vLLM
+  volumes:
+  - name : cache
+    emptyDir: {}          
+  - name : config
+    emptyDir: {}
+  - name: shm
+    emptyDir:
+      medium: Memory
+  - name: triton
+    emptyDir: {}

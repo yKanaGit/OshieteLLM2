@@ -1,0 +1,49 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: migrated-gpu
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/template-display-name: Faster Whisper Serving Runtime
+    opendatahub.io/template-name: faster-whisper-serving-runtime
+    openshift.io/display-name: faster-whisper-serving-runtime
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: faster-whisper-large-v3-faster-whisper
+  namespace: user1
+spec:
+  containers:
+  - env:
+    - name: WHISPER_MODEL
+      value: /mnt/models
+    - name: WHISPER_LANGUAGE
+      value: ja
+    image: quay.io/mmuraki/faster_whisper_server_serving_runtime:1.0.2_gpu_cuda12_2
+    name: kserve-container
+    ports:
+    - containerPort: 8000
+      protocol: TCP
+    resources:
+      limits:
+        cpu: "2"
+        memory: 8Gi
+      requests:
+        cpu: "200m"
+        memory: 1Gi
+    volumeMounts:
+    - mountPath: /dev/shm
+      name: shm
+    - mountPath: /faster-whisper-server/.cache
+      name: cache
+  multiModel: false
+  supportedModelFormats:
+  - autoSelect: true
+    name: CTranslate2
+  volumes:
+  - emptyDir:
+      medium: Memory
+      sizeLimit: 2Gi
+    name: shm
+  - name : cache
+    emptyDir: {}          
+      

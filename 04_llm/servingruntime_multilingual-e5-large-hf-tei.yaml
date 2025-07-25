@@ -1,0 +1,34 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: migrated-gpu
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/template-display-name: Text Embedding Inference Serving Runtime
+    opendatahub.io/template-name: multilingual-e5-large-hf-tei
+    openshift.io/display-name: multilingual-e5-large-hf-tei
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: multilingual-e5-large-hf-tei
+  namespace: user1
+spec:
+  containers:
+  - args:
+    - --model-id
+    - /mnt/models/
+    image: ghcr.io/huggingface/text-embeddings-inference:86-1.5
+    name: kserve-container
+    ports:
+    - containerPort: 3000
+      protocol: TCP
+    resources:
+      limits:
+        cpu: "2"
+        memory: 8Gi
+      requests:
+        cpu: "200m"
+        memory: 1Gi
+  multiModel: false
+  supportedModelFormats:
+  - autoSelect: true
+    name: pytorch

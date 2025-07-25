@@ -1,0 +1,31 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: StableDiffusion
+    serving.kserve.io/deploymentMode: RawDeployment
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: stablediffusion
+  namespace: user1
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: pytorch
+      name: ""
+      runtime: stablediffusion
+      storage:
+        key: aws-connection-minio
+        path: models/stablediffusion
+    tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      operator: Exists
+    - effect: PreferNoSchedule
+      key: gpu-workload-only
+      operator: Exists
+    nodeSelector:
+      gpu-node-type: "3"

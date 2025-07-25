@@ -1,0 +1,54 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: migrated-gpu
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/template-display-name: StableDiffusion Serving Runtime
+    opendatahub.io/template-name: stablediffusion-serving-runtime
+    openshift.io/display-name: stablediffusion-serving-runtime
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: stablediffusion
+  namespace: user1
+spec:
+  containers:
+  - env:
+    - name: NUMBA_CACHE_DIR
+      value: /tmp
+    image: quay.io/mmuraki/rhsc2024_open_web_ui_automatic1111:latest
+    name: kserve-container
+    ports:
+    - containerPort: 7860
+      protocol: TCP
+    resources:
+      limits:
+        cpu: "2"
+        memory: 8Gi
+      requests:
+        cpu: "200m"
+        memory: 1Gi
+    volumeMounts:
+    - name: cache
+      mountPath: /.cache
+    - name: config
+      mountPath: /.config
+    - name: stable-diffusion-webui
+      mountPath: /stable-diffusion-webui
+    - name: shm
+      mountPath: /dev/shm
+  multiModel: false
+  supportedModelFormats:
+  - autoSelect: true
+    name: pytorch
+  volumes:
+  - name: cache
+    emptyDir: {}          
+  - name: config
+    emptyDir: {}
+  - name: stable-diffusion-webui
+    emptyDir: {}
+  - name: shm
+    emptyDir:
+      medium: Memory
