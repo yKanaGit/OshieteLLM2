@@ -2,11 +2,11 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: Tanuki-8B-dpo-v1.0
+    openshift.io/display-name: chatglm3-6b
     serving.kserve.io/deploymentMode: RawDeployment
   labels:
     opendatahub.io/dashboard: "true"
-  name: tanuki-8b-dpo-v1-0
+  name: chatglm3-6b
   namespace: user1
 spec:
   predictor:
@@ -24,13 +24,13 @@ spec:
       runtime: vllm-runtime
       storage:
         key: aws-connection-minio
-        path: models/Tanuki-8B-dpo-v1.0
+        path: models/chatglm3-6b
     tolerations:
     - effect: NoSchedule
       key: nvidia.com/gpu
       operator: Exists
     - effect: PreferNoSchedule
       key: gpu-workload-only
-      operator: Exists        
+      operator: Exists
     nodeSelector:
       gpu-node-type: "2"

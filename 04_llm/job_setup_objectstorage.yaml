@@ -42,21 +42,21 @@ spec:
           #git clone https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B-AWQ
           #rm -rf Llama-3-ELYZA-JP-8B-AWQ/.git
           #aws s3 cp --recursive Llama-3-ELYZA-JP-8B-AWQ s3://${NAMESPACE}/models/Llama-3-ELYZA-JP-8B-AWQ
-          git clone https://huggingface.co/weblab-GENIAC/Tanuki-8B-dpo-v1.0
-          rm -rf Tanuki-8B-dpo-v1.0/.git
-          aws s3 cp --recursive Tanuki-8B-dpo-v1.0 s3://${NAMESPACE}/models/Tanuki-8B-dpo-v1.0
           git clone https://huggingface.co/ibm-granite/granite-3.0-8b-instruct
           rm -rf granite-3.0-8b-instruct/.git
           aws s3 cp --recursive granite-3.0-8b-instruct s3://${NAMESPACE}/models/granite-3.0-8b-instruct
           git clone https://huggingface.co/intfloat/multilingual-e5-large
           rm -rf multilingual-e5-large/.git
           aws s3 cp --recursive multilingual-e5-large s3://${NAMESPACE}/models/multilingual-e5-large
-          git clone https://huggingface.co/Systran/faster-whisper-large-v3
-          rm -rf faster-whisper-large-v3/.git
-          aws s3 cp --recursive faster-whisper-large-v3 s3://${NAMESPACE}/models/faster-whisper-large-v3
-          mkdir -p /tmp/stablediffusion
-          touch /tmp/stablediffusion/dummy
-          aws s3 cp --recursive /tmp/stablediffusion s3://${NAMESPACE}/models/stablediffusion
+            git clone https://huggingface.co/Systran/faster-whisper-large-v3
+            rm -rf faster-whisper-large-v3/.git
+            aws s3 cp --recursive faster-whisper-large-v3 s3://${NAMESPACE}/models/faster-whisper-large-v3
+            git clone https://huggingface.co/THUDM/chatglm3-6b
+            rm -rf chatglm3-6b/.git
+            aws s3 cp --recursive chatglm3-6b s3://${NAMESPACE}/models/chatglm3-6b
+            mkdir -p /tmp/stablediffusion
+            touch /tmp/stablediffusion/dummy
+            aws s3 cp --recursive /tmp/stablediffusion s3://${NAMESPACE}/models/stablediffusion
           set +e
           aws s3 ls --recursive s3://${NAMESPACE}
         envFrom:

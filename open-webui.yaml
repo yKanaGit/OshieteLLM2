@@ -37,7 +37,7 @@ spec:
         - name: AIOHTTP_CLIENT_TIMEOUT
           value: "1600"
         - name: DEFAULT_MODELS
-          value: "phi-4-quantized-w8a8"
+          value: "phi-4-quantized-w8a8,chatglm3-6b"
         - name: RAG_EMBEDDING_ENGINE
           value: "openai"
         - name: RAG_EMBEDDING_MODEL
@@ -72,7 +72,7 @@ spec:
         - name: ENABLE_OLLAMA_API
           value: "false"
         - name: OPENAI_API_BASE_URLS
-          value: "http://phi-4-quantized-w8a8-predictor.user1.svc.cluster.local:8080/v1;http://tanuki-8b-dpo-v1-0-predictor.user1.svc.cluster.local:8080/v1;http://llama-3-elyza-jp-8b-predictor.user1.svc.cluster.local:8080/v1;http://granite-3-0-8b-instruct-predictor.user1.svc.cluster.local:8080/v1"
+          value: "http://phi-4-quantized-w8a8-predictor.user1.svc.cluster.local:8080/v1;http://llama-3-elyza-jp-8b-predictor.user1.svc.cluster.local:8080/v1;http://granite-3-0-8b-instruct-predictor.user1.svc.cluster.local:8080/v1;http://chatglm3-6b-predictor.user1.svc.cluster.local:8080/v1"
         - name: OPENAI_API_KEY
           value: "openshift"
         - name: ENABLE_IMAGE_GENERATION
