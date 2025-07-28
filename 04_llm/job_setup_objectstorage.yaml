@@ -42,9 +42,6 @@ spec:
           #git clone https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B-AWQ
           #rm -rf Llama-3-ELYZA-JP-8B-AWQ/.git
           #aws s3 cp --recursive Llama-3-ELYZA-JP-8B-AWQ s3://${NAMESPACE}/models/Llama-3-ELYZA-JP-8B-AWQ
-          git clone https://huggingface.co/weblab-GENIAC/Tanuki-8B-dpo-v1.0
-          rm -rf Tanuki-8B-dpo-v1.0/.git
-          aws s3 cp --recursive Tanuki-8B-dpo-v1.0 s3://${NAMESPACE}/models/Tanuki-8B-dpo-v1.0
           git clone https://huggingface.co/ibm-granite/granite-3.0-8b-instruct
           rm -rf granite-3.0-8b-instruct/.git
           aws s3 cp --recursive granite-3.0-8b-instruct s3://${NAMESPACE}/models/granite-3.0-8b-instruct

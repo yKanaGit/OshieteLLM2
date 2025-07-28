@@ -49,8 +49,6 @@ oc apply -f servingruntime_vllm.yaml -n ${USER}
 #oc apply -f servingruntime_phi-4-quantized-w8a8-vllm.yaml -n ${USER}
 oc apply -f inferenceservice_phi-4-quantized-w8a8.yaml -n ${USER}
 
-#oc apply -f servingruntime_tanuki-8b-dpo-v1-0-vllm.yaml -n ${USER}
-oc apply -f inferenceservice_tanuki-8b-dpo-v1-0.yaml -n ${USER}
 #oc apply -f servingruntime_llama-3-elyza-jp-8b-vllm.yaml -n ${USER}
 oc apply -f inferenceservice_llama-3-elyza-jp-8b.yaml -n ${USER}
 #oc apply -f servingruntime_granite-3-0-8b-instruct-vllm.yaml -n ${USER}
@@ -67,8 +65,6 @@ oc apply -f inferenceservice_stablediffusion.yaml -n ${USER}
 while true; do oc get inferenceservices/phi-4-quantized-w8a8 -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/phi-4-quantized-w8a8 does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
 oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 60m inferenceservices/phi-4-quantized-w8a8 -n ${USER}
 
-while true; do oc get inferenceservices/tanuki-8b-dpo-v1-0 -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/tanuki-8b-dpo-v1-0 does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
-oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/tanuki-8b-dpo-v1-0 -n ${USER}
 
 while true; do oc get inferenceservices/llama-3-elyza-jp-8b -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/llama-3-elyza-jp-8b does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
 oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/llama-3-elyza-jp-8b -n ${USER}
