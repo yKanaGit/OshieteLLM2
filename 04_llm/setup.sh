@@ -53,7 +53,7 @@ oc apply -f inferenceservice_phi-4-quantized-w8a8.yaml -n ${USER}
 oc apply -f inferenceservice_llama-3-elyza-jp-8b.yaml -n ${USER}
 #oc apply -f servingruntime_granite-3-0-8b-instruct-vllm.yaml -n ${USER}
 oc apply -f inferenceservice_granite-3-0-8b-instruct.yaml -n ${USER}
-oc apply -f inferenceservice_chatglm3-6b.yaml -n ${USER}
+oc apply -f inferenceservice_qwen3-8b-base.yaml -n ${USER}
 
 oc apply -f servingruntime_multilingual-e5-large-hf-tei.yaml -n ${USER}
 oc apply -f inferenceservice_multilingual-e5-large.yaml -n ${USER}
@@ -72,8 +72,8 @@ oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeo
 while true; do oc get inferenceservices/granite-3-0-8b-instruct -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/granite-3-0-8b-instruct does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
 oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/granite-3-0-8b-instruct -n ${USER}
 
-while true; do oc get inferenceservices/chatglm3-6b -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/chatglm3-6b does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
-oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/chatglm3-6b -n ${USER}
+while true; do oc get inferenceservices/qwen3-8b-base -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/qwen3-8b-base does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
+oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/qwen3-8b-base -n ${USER}
 
 while true; do oc get inferenceservices/multilingual-e5-large -n ${USER} 2>&1 | grep "not found" 1>/dev/null 2>&1; if [ $? -eq 0 ]; then echo "inferenceservices/multilingual-e5-large does not exist yet. waiting..."; sleep 3; continue; else break; fi; done
 oc wait --for=jsonpath='{.status.modelStatus.transitionStatus}'=UpToDate --timeout 30m inferenceservices/multilingual-e5-large -n ${USER}
