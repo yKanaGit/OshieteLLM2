@@ -2,11 +2,11 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: qwen3-8b
+    openshift.io/display-name: qwen3-4b
     serving.kserve.io/deploymentMode: RawDeployment
   labels:
     opendatahub.io/dashboard: "true"
-  name: qwen3-8b
+  name: qwen3-4b
   namespace: user1
 spec:
   predictor:
@@ -24,7 +24,7 @@ spec:
       runtime: vllm-runtime
       storage:
         key: aws-connection-minio
-        path: models/qwen3-8b
+        path: models/qwen3-4b
     tolerations:
     - effect: NoSchedule
       key: nvidia.com/gpu
