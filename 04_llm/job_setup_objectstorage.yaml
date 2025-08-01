@@ -48,9 +48,9 @@ spec:
             git clone https://huggingface.co/Systran/faster-whisper-large-v3
             rm -rf faster-whisper-large-v3/.git
             aws s3 cp --recursive faster-whisper-large-v3 s3://${NAMESPACE}/models/faster-whisper-large-v3
-          git clone https://huggingface.co/Qwen/Qwen3-8B-AWQ
-          rm -rf Qwen3-8B-AWQ/.git
-          aws s3 cp --recursive Qwen3-8B-AWQ s3://${NAMESPACE}/models/qwen3-8b
+          git clone https://huggingface.co/Qwen/Qwen3-4B
+          rm -rf Qwen3-4B/.git
+          aws s3 cp --recursive Qwen3-4B s3://${NAMESPACE}/models/qwen3-4b
             mkdir -p /tmp/stablediffusion
             touch /tmp/stablediffusion/dummy
             aws s3 cp --recursive /tmp/stablediffusion s3://${NAMESPACE}/models/stablediffusion
