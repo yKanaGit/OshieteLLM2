@@ -42,18 +42,15 @@ spec:
           #git clone https://huggingface.co/elyza/Llama-3-ELYZA-JP-8B-AWQ
           #rm -rf Llama-3-ELYZA-JP-8B-AWQ/.git
           #aws s3 cp --recursive Llama-3-ELYZA-JP-8B-AWQ s3://${NAMESPACE}/models/Llama-3-ELYZA-JP-8B-AWQ
-          git clone https://huggingface.co/ibm-granite/granite-3.0-8b-instruct
-          rm -rf granite-3.0-8b-instruct/.git
-          aws s3 cp --recursive granite-3.0-8b-instruct s3://${NAMESPACE}/models/granite-3.0-8b-instruct
           git clone https://huggingface.co/intfloat/multilingual-e5-large
           rm -rf multilingual-e5-large/.git
           aws s3 cp --recursive multilingual-e5-large s3://${NAMESPACE}/models/multilingual-e5-large
             git clone https://huggingface.co/Systran/faster-whisper-large-v3
             rm -rf faster-whisper-large-v3/.git
             aws s3 cp --recursive faster-whisper-large-v3 s3://${NAMESPACE}/models/faster-whisper-large-v3
-            git clone https://huggingface.co/Qwen/Qwen3-4B-Base
-            rm -rf Qwen3-4B-Base/.git
-            aws s3 cp --recursive Qwen3-4B-Base s3://${NAMESPACE}/models/qwen3-4b-base
+            git clone https://huggingface.co/Qwen/Qwen3-8B-Base
+            rm -rf Qwen3-8B-Base/.git
+            aws s3 cp --recursive Qwen3-8B-Base s3://${NAMESPACE}/models/qwen3-8b-base
             mkdir -p /tmp/stablediffusion
             touch /tmp/stablediffusion/dummy
             aws s3 cp --recursive /tmp/stablediffusion s3://${NAMESPACE}/models/stablediffusion

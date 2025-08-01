@@ -2,11 +2,11 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: granite-3-0-8b-instruct
+    openshift.io/display-name: qwen3-8b-base
     serving.kserve.io/deploymentMode: RawDeployment
   labels:
     opendatahub.io/dashboard: "true"
-  name: granite-3-0-8b-instruct
+  name: qwen3-8b-base
   namespace: user1
 spec:
   predictor:
@@ -24,13 +24,13 @@ spec:
       runtime: vllm-runtime
       storage:
         key: aws-connection-minio
-        path: models/granite-3.0-8b-instruct
+        path: models/qwen3-8b-base
     tolerations:
     - effect: NoSchedule
       key: nvidia.com/gpu
       operator: Exists
     - effect: PreferNoSchedule
       key: gpu-workload-only
-      operator: Exists        
+      operator: Exists
     nodeSelector:
-      gpu-node-type: "2"     
+      gpu-node-type: "2"
